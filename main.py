@@ -1,5 +1,6 @@
 import logging
 from fastapi import FastAPI, Depends
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from config import settings
@@ -52,3 +53,6 @@ def list_readings(db: Session = Depends(get_db)):
 def predict(r: ReadingIn):
     # Simple rule-based threshold check (returns True if temperature exceeds 35)
     return {"anomaly": r.temperature > 35}
+@app.get("/")
+def serve_ui():
+    return FileResponse("static/index.html")
